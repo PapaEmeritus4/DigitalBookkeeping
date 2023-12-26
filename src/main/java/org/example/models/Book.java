@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class Book {
-    private int bookId;
+    private int id;
 
     @NotEmpty
     @Size(min = 2, max = 200, message = "Title should be between 2 and 200 characters")
@@ -21,19 +21,19 @@ public class Book {
     public Book() {
     }
 
-    public Book(int bookId, String name, String author, int yearOfPublication) {
-        this.bookId = bookId;
+    public Book(int id, String name, String author, int yearOfPublication) {
+        this.id = id;
         this.title = name;
         this.author = author;
         this.yearOfPublication = yearOfPublication;
     }
 
-    public int getBookId() {
-        return bookId;
+    public int getId() {
+        return id;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setId(int id) {
+        this.id = id;
     }
 
 

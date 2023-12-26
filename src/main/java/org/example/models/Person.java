@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class Person {
-    private int personId;
+    private int id;
 
     @NotEmpty
     @Size(min = 2, max = 200, message = "Name should be between 2 and 200 characters")
@@ -17,18 +17,18 @@ public class Person {
     public Person() {
     }
 
-    public Person(int personId, String name, int yearOfBirth) {
-        this.personId = personId;
+    public Person(int id, String name, int yearOfBirth) {
+        this.id = id;
         this.name = name;
         this.yearOfBirth = yearOfBirth;
     }
 
-    public int getPersonId() {
-        return personId;
+    public int getId() {
+        return id;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

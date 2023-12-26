@@ -23,6 +23,11 @@ public class PersonDAO {
                 new BeanPropertyRowMapper<>(Person.class));
     }
 
+    public Optional<Person> getPersonByName(String name) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name=?", new Object[]{name}, new BeanPropertyRowMapper<>(Person.class)).
+                stream().findAny();
+    }
+
     public Optional<Person> show(int personId) {
         return jdbcTemplate.query("SELECT * FROM Person WHERE person_id=?", new Object[]{personId},
                 new BeanPropertyRowMapper<>(Person.class))
@@ -37,7 +42,8 @@ public class PersonDAO {
     public void update(int personId, Person updatetPerson) {
         jdbcTemplate.update("UPDATE Person SET name=?, year_of_birth=? WHERE person_id=?",
                 updatetPerson.getName(),
-                updatetPerson.getYearOfBirth());
+                updatetPerson.getYearOfBirth(),
+                personId);
     }
 
     public void delete(int personId) {
