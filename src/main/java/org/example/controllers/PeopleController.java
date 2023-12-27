@@ -32,20 +32,18 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int personId, Model model) {
-        model.addAttribute("person", personDAO.show(personId));
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("person", personDAO.show(id));
 
         return "people/show";
     }
 
     @GetMapping("/new")
-    public String newPerson(Model model) {
-        model.addAttribute("person", new Person());
-
+    public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
-    @GetMapping()
+    @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
@@ -60,8 +58,8 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int personId) {
-        model.addAttribute("person", personDAO.show(personId));
+    public String edit(Model model, @PathVariable("id") int id) {
+        model.addAttribute("person", personDAO.show(id));
 
         return "people/edit";
     }

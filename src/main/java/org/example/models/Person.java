@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class Person {
     private int id;
 
-    @NotEmpty
+    @NotEmpty(message = "Name must not be empty")
     @Size(min = 2, max = 200, message = "Name should be between 2 and 200 characters")
     private String name;
 
