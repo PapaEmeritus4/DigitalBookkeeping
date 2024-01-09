@@ -34,6 +34,40 @@ public class PersonDAO {
         return people;
     }
 
+    @Transactional(readOnly = true)
+    public Person show(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Person person = session.get(Person.class, id);
+
+        return person;
+    }
+
+    @Transactional(readOnly = false)
+    public void save(Person person) {
+        Session session = sessionFactory.getCurrentSession();
+
+        session.save(person);
+    }
+
+    @Transactional(readOnly = false)
+    public void update(int id, Person person) {
+        Session session = sessionFactory.getCurrentSession();
+
+        person = session.get(Person.class, id);
+
+        session.update(person);
+    }
+
+    @Transactional(readOnly = false)
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Person person = session.get(Person.class, id);
+
+        session.delete(person);
+    }
+
 }
 //      РАБОТА С БД ЧЕРЕЗ JdbcTemplate
 
