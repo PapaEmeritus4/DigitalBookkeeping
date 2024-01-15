@@ -15,7 +15,6 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-//    private final PersonDAO personDAO;
     private final PeopleService peopleService;
     private final PersonValidator personValidator;
 
@@ -36,7 +35,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", peopleService.findOne(id));
-//        model.addAttribute("books", personDAO.getBooksByPersonId(id));
+        model.addAttribute("books", peopleService.getBooksByPersonId(id));
 
         return "people/show";
     }

@@ -6,6 +6,7 @@ import org.example.models.Person;
 import org.example.services.BookService;
 import org.example.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +30,17 @@ public class BookController {
 
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String index(Model model,
+                        @RequestParam(value = "page",
+                                required = false) Integer page,
+                        @RequestParam(value = "books_per_page",
+                                required = false) Integer booksPerPage) {
+
+        if (page == null || booksPerPage == null) {
+            model.addAttribute("books", bookService.findAll());
+        } else {
+            model.addAttribute("books", bookService.findWithPagination(page, booksPerPage));
+        }
 
         return "books/index";
     }
@@ -40,7 +50,7 @@ public class BookController {
                        @ModelAttribute("person")Person person) {
         model.addAttribute("book", bookService.findOne(id));
 
-        Optional<Person> bookOwner = bookService.findByPerson(person);
+        Optional<Person> bookOwner = bookService.getBookOwner(id);
 
         if (bookOwner.isPresent()) {
             model.addAttribute("owner", bookOwner.get());
@@ -52,7 +62,7 @@ public class BookController {
     }
 
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("book") Book book) {
+    public String newBook(@ModelAttribute("book") Book book) {
         return "books/new";
     }
 
@@ -97,7 +107,7 @@ public class BookController {
 
     @PatchMapping("/{id}/release")
     public String release(@PathVariable("id") int id) {
-//        bookDAO.release(id);
+        bookService.release(id);
 
         return "redirect:/books/" + id;
     }
@@ -105,7 +115,7 @@ public class BookController {
     @PatchMapping("/{id}/appoint")
     public String appoint(@PathVariable("id") int id,
                           @ModelAttribute("person") Person person) {
-//        bookDAO.appoint(id, person);
+        bookService.appoint(id, person);
 
         return "redirect:/books/" + id;
     }

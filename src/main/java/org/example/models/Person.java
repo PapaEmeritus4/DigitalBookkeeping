@@ -27,7 +27,7 @@ public class Person {
     @Column(name = "year_of_birth")
     private int yearOfBirth;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "owner")
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<Book> books;
 

@@ -28,7 +28,7 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if (peopleService.findByName(person.getName()).contains(target)) {
+        if (peopleService.findByName(person.getName()).isPresent()) {
             errors.rejectValue("name", "", "This name already used");
         }
     }
