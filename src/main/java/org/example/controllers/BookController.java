@@ -34,12 +34,14 @@ public class BookController {
                         @RequestParam(value = "page",
                                 required = false) Integer page,
                         @RequestParam(value = "books_per_page",
-                                required = false) Integer booksPerPage) {
+                                required = false) Integer booksPerPage,
+                        @RequestParam(value = "sort_by_year",
+                                required = false) boolean sortByYear) {
 
         if (page == null || booksPerPage == null) {
-            model.addAttribute("books", bookService.findAll());
+            model.addAttribute("books", bookService.findAll(sortByYear));
         } else {
-            model.addAttribute("books", bookService.findWithPagination(page, booksPerPage));
+            model.addAttribute("books", bookService.findWithPagination(page, booksPerPage, sortByYear));
         }
 
         return "books/index";
@@ -118,5 +120,14 @@ public class BookController {
         bookService.appoint(id, person);
 
         return "redirect:/books/" + id;
+    }
+
+    @GetMapping("/search")
+    public String search(Model model,
+                         @RequestParam(name = "title",
+                         required = false, defaultValue = "") String title) {
+        model.addAttribute("search", bookService.findByTitleStartingWith(title));
+
+        return "books/search";
     }
 }
