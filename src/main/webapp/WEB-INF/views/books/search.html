@@ -6,15 +6,32 @@
 </head>
 <body>
 
-<form th:action="@{/search}" method="get" th:object="${book}">
-    <label for="title">Enter a search query: </label>
-    <input type="text" th:field="*{title}" id="title"/>
-    <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title error</div>
+<form th:method="POST" th:action="@{/books/search}">
+    <label for="query">Enter a search query: </label>
+    <input type="text" id="query" name="query"/>
     <br/>
-
-
     <input type="submit" value="Search!"/>
 </form>
+
+<div th:if="${books}">
+    <div th:if="${books.isEmpty()}">
+        <span>No books found</span>
+    </div>
+
+    <div th:each="book : ${books}">
+        <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublication()}">book</p>
+
+        <div th:if="${book.getOwner() != null}">
+            <span>The book is now with: </span> <span th:text="${book.getOwner().getName()}">Person Name</span>
+        </div>
+
+        <div th:if="${book.getOwner() == null}">
+            <span>The book is free</span>
+        </div>
+
+        <hr/>
+    </div>
+</div>
 
 </body>
 </html>

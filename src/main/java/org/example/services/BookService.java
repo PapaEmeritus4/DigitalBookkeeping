@@ -3,10 +3,7 @@ package org.example.services;
 import org.example.models.Book;
 import org.example.models.Person;
 import org.example.repositories.BookRepository;
-import org.example.repositories.PeopleRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,8 +42,8 @@ public class BookService {
             }
     }
 
-    public List<Book> findByTitleStartingWith(String title) {
-       return bookRepository.findByTitleStartingWith(title);
+    public List<Book> searchByTitle(String query) {
+       return bookRepository.findByTitleStartingWith(query);
     }
 
     public Book findOne(int id) {
@@ -55,28 +52,32 @@ public class BookService {
         return foundBook.orElse(null);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void save(Book book) {
         bookRepository.save(book);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void update(int id, Book updatedBook) {
+        Book bookToBeUpdated = bookRepository.findById(id).get();
+
         updatedBook.setId(id);
+        updatedBook.setOwner(bookToBeUpdated.getOwner());
+
         bookRepository.save(updatedBook);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void delete(int id) {
         bookRepository.deleteById(id);
     }
 
-    public Optional<Person> getBookOwner(int id) {
+    public Person getBookOwner(int id) {
         return bookRepository.findById(id)
-                .map(Book::getOwner);
+                .map(Book::getOwner).orElse(null);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void release(int id) {
         bookRepository.findById(id).ifPresent(
                 book -> {
@@ -84,7 +85,7 @@ public class BookService {
         });
     }
 
-    @Transactional(readOnly = false)
+    @Transactional()
     public void appoint(int id, Person person) {
         bookRepository.findById(id).ifPresent(
                 book -> {
