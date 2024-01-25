@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +61,19 @@ public class PeopleService {
 
         if (person.isPresent()) {
             Hibernate.initialize(person.get().getBooks());
+
+            person.get().getBooks().forEach(book -> {
+                // Преобразование Date в LocalDate
+                LocalDate takeAtLocalDate = book.getTakeAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                // Получение текущей даты
+                LocalDate currentDate = LocalDate.now();
+
+                // Сравнение дат и установка признака просроченности
+                if (currentDate.minusDays(10).isAfter(takeAtLocalDate)) {
+                    book.setOverdueBook(true);
+                }
+            });
 
             return person.get().getBooks();
         } else {

@@ -20,11 +20,17 @@
     <b>Books:</b>
     <br/>
     <table th:each="book : ${books}">
-        <tr th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublication()}">book</tr>
+        <tr>
+            <td>
+                <span th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublication()}"
+                      th:style="${book.isOverdueBook()} ? 'color: red' : 'color: black'">
+                    book
+                </span>
+            </td>
+        </tr>
     </table>
     <hr/>
 </div>
-
 
 <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
     <input type="submit" value="Edit">

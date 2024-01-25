@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,6 +80,7 @@ public class BookService {
         bookRepository.findById(id).ifPresent(
                 book -> {
                     book.setOwner(null);
+                    book.setTakeAt(null);
         });
     }
 
@@ -90,6 +89,7 @@ public class BookService {
         bookRepository.findById(id).ifPresent(
                 book -> {
                     book.setOwner(person);
+                    book.setTakeAt(new Date());
         });
     }
 }

@@ -1,9 +1,12 @@
 package org.example.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +31,14 @@ public class Book {
     @Min(value = 1500, message = "Year of publication should be greater than 1500")
     @Column(name = "year_of_publication")
     private int yearOfPublication;
+
+    @Column(name = "take_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takeAt;
+
+    @Transient
+    private Boolean overdueBook;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -73,6 +84,22 @@ public class Book {
 
     public void setYearOfPublication(int yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
+    }
+
+    public Date getTakeAt() {
+        return takeAt;
+    }
+
+    public void setTakeAt(Date takeAt) {
+        this.takeAt = takeAt;
+    }
+
+    public Boolean isOverdueBook() {
+        return overdueBook;
+    }
+
+    public void setOverdueBook(Boolean overdueBook) {
+        this.overdueBook = overdueBook;
     }
 
     public Person getOwner() {
